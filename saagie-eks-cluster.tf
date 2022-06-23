@@ -96,8 +96,8 @@ resource "aws_security_group_rule" "saagi-estiam-eks_cluster_outbound_sg" {
 # arn:aws:iam::984163881352:oidc-provider/oidc.eks.eu-west-3.amazonaws.com/id/8D46AA41CAC19C2BF721F88AE8602C5E  provider_arn
 
 # Saagie IAM Role for Saagie's job
-resource "aws_iam_role" "saagi-estiam-eks_cluster_role" {
-  name = "saagi-estiam-eks_cluster_role"
+resource "aws_iam_role" "saagi-estiam-saagie_job_role" {
+  name = "saagi-estiam-saagie_job_role"
   
    assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -121,38 +121,3 @@ resource "aws_iam_role" "saagi-estiam-eks_cluster_role" {
     ]
   })  
 }
-
-
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "arn:aws:iam::984163881352:oidc-provider/oidc.eks.eu-west-3.amazonaws.com/id/8D46AA41CAC19C2BF721F88AE8602C5E"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "oidc.eks.eu-west-3.amazonaws.com/id/8D46AA41CAC19C2BF721F88AE8602C5E:aud": "sts.amazonaws.com"
-        },
-        "StringLike": {
-          "oidc.eks.eu-west-3.amazonaws.com/id/8D46AA41CAC19C2BF721F88AE8602C5E:sub": "system:serviceaccount:saagiestiam-project*:*"
-        }
-      }
-    }
-  ]
-}
-
-aws iam create-role \
-  --role-name $ROLE_NAME \
-  --assume-role-policy-document file://saagie-job-trust-policy.json
-aws iam update-assume-role-policy \
-  --role-name $ROLE_NAME \
-  --policy-document file://saagie-job-trust-policy.json
-aws iam attach-role-policy \
-  --role-name $ROLE_NAME \
-  --policy-arn $AWS_POLICY_ARN
-aws iam get-role \
-  --role-name $ROLE_NAME \
-  --query Role.Arn --output text
