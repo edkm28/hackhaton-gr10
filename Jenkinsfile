@@ -10,8 +10,8 @@ pipeline {
 
 
      environment {
-        AWS_ACCESS_KEY_ID     = 'AKIA6KJF5CGEEQVILBWL'
-        AWS_SECRET_ACCESS_KEY = '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'
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
     }
 
 
@@ -21,7 +21,7 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                            git "https://github.com/edkm28/hackhaton-gr10.git"
+                            git "https://github.com/troy-ingram/week-24-project.git"
                         }
                     }
                 }
