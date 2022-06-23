@@ -1,7 +1,7 @@
 # EKS Node Groups
 resource "aws_eks_node_group" "saagi-estiam-eks_cluster_nodes_group" {
   cluster_name    = aws_eks_cluster.saagi-estiam-eks_cluster.name
-  node_group_name = "saagi-estiam" 
+  node_group_name = "saagi-estiam"
   node_role_arn   = aws_iam_role.saagie-estiam-node-role.arn
   subnet_ids      = [aws_subnet.saagi-estiam-vpc-private-subnet.id]
 
@@ -13,15 +13,15 @@ resource "aws_eks_node_group" "saagi-estiam-eks_cluster_nodes_group" {
 
   ami_type       = "AL2_x86_64" # AL2_x86_64, AL2_x86_64_GPU, AL2_ARM_64, CUSTOM
   capacity_type  = "ON_DEMAND"  # ON_DEMAND, SPOT
-  disk_size      = 300 #espace disque de 300 Go
+  disk_size      = 300          #espace disque de 300 Go
   instance_types = ["m5.xlarge"]
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-eks_cluster_nodes_group"
-    }
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-eks_cluster_nodes_group"
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.saagi-estiam-eks_cluster_nodes_AmazonEKSWorkerNodePolicy,
@@ -44,19 +44,19 @@ resource "aws_security_group" "saagi-estiam-eks_cluster_nodes_sg" {
   }
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-eks_cluster_nodes_sg"
-    }
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-eks_cluster_nodes_sg"
+  }
 }
 
 # EKS Node IAM Role
 resource "aws_iam_role" "saagie-estiam-node-role" {
   name = "saagie-estiam-node-role"
 
- assume_role_policy = jsonencode({
-    Version = "2012-10-17" 
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
     Statement = [
       {
         Action = "sts:AssumeRole"
@@ -67,7 +67,7 @@ resource "aws_iam_role" "saagie-estiam-node-role" {
         }
       },
     ]
-  })  
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "saagi-estiam-eks_cluster_nodes_AmazonEKSWorkerNodePolicy" {

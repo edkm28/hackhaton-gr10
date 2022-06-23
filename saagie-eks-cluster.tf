@@ -3,20 +3,20 @@ resource "aws_eks_cluster" "saagi-estiam-eks_cluster" {
   name     = "saagi-estiam-eks_cluster"
   role_arn = aws_iam_role.saagi-estiam-eks_cluster_role.arn
   version  = "1.21"
-  
+
   vpc_config {
-    subnet_ids              = [aws_subnet.saagi-estiam-vpc-public-subnet.id, aws_subnet.saagi-estiam-vpc-private-subnet.id] 
+    subnet_ids              = [aws_subnet.saagi-estiam-vpc-public-subnet.id, aws_subnet.saagi-estiam-vpc-private-subnet.id]
     endpoint_private_access = true
     endpoint_public_access  = true
     public_access_cidrs     = ["0.0.0.0/0"]
   }
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-eks_cluster"
-    }
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-eks_cluster"
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.saagi-estiam-eks_cluster_role_AmazonEKSClusterPolicy
@@ -26,8 +26,8 @@ resource "aws_eks_cluster" "saagi-estiam-eks_cluster" {
 # EKS Cluster IAM Role
 resource "aws_iam_role" "saagi-estiam-eks_cluster_role" {
   name = "saagi-estiam-eks_cluster_role"
-  
-   assume_role_policy = jsonencode({
+
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
@@ -47,7 +47,7 @@ resource "aws_iam_role" "saagi-estiam-eks_cluster_role" {
         },
       },
     ]
-  })  
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "saagi-estiam-eks_cluster_role_AmazonEKSClusterPolicy" {
@@ -61,12 +61,12 @@ resource "aws_security_group" "saagi-estiam-eks_cluster_sg" {
   description = "Cluster communication with worker nodes"
   vpc_id      = aws_vpc.saagi-estiam-vpc.id
 
-tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-eks_cluster_sg"
-    }
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-eks_cluster_sg"
+  }
 }
 
 resource "aws_security_group_rule" "saagi-estiam-eks_cluster_inbound_sg" {
@@ -98,8 +98,8 @@ resource "aws_security_group_rule" "saagi-estiam-eks_cluster_outbound_sg" {
 # Saagie IAM Role for Saagie's job
 resource "aws_iam_role" "saagi-estiam-saagie_job_role" {
   name = "saagi-estiam-saagie_job_role"
-  
-   assume_role_policy = jsonencode({
+
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
@@ -119,5 +119,5 @@ resource "aws_iam_role" "saagi-estiam-saagie_job_role" {
         },
       },
     ]
-  })  
+  })
 }

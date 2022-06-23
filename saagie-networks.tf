@@ -8,11 +8,11 @@ resource "aws_vpc" "saagi-estiam-vpc" {
   enable_dns_support   = true
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-vpc"
-    }
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-vpc"
+  }
 }
 
 # Définition de la passerelle internet (Internet Gateway, IGW)
@@ -20,10 +20,10 @@ resource "aws_internet_gateway" "saagi-estiam-internet-gateway" {
   vpc_id = aws_vpc.saagi-estiam-vpc.id
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-internet-gateway"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-internet-gateway"
   }
 
   depends_on = [aws_vpc.saagi-estiam-vpc]
@@ -31,40 +31,40 @@ resource "aws_internet_gateway" "saagi-estiam-internet-gateway" {
 
 # Création du sous-réseau publique
 resource "aws_subnet" "saagi-estiam-vpc-public-subnet" {
-  
+
   vpc_id            = aws_vpc.saagi-estiam-vpc.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "eu-west-3a"
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-vpc-public-subnet"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-vpc-public-subnet"
 
-        "kubernetes.io/role/elb"                         = 1        # ajout d'un équillibreur de charge public
-        "kubernetes.io/cluster/saagi-estiam-eks_cluster" = "shared" # ajout du sous-réseau public à l'équillibreur de charge public
-    }
+    "kubernetes.io/role/elb"                         = 1        # ajout d'un équillibreur de charge public
+    "kubernetes.io/cluster/saagi-estiam-eks_cluster" = "shared" # ajout du sous-réseau public à l'équillibreur de charge public
+  }
 
-  map_public_ip_on_launch = true  
+  map_public_ip_on_launch = true
 }
 
 # Création du sous-réseau privé
 resource "aws_subnet" "saagi-estiam-vpc-private-subnet" {
-  
+
   vpc_id            = aws_vpc.saagi-estiam-vpc.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "eu-west-3b"
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-vpc-private-subnet"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-vpc-private-subnet"
 
-        "kubernetes.io/role/internal-elb"                = 1        # ajout d'un équillibreur de charge interne
-        "kubernetes.io/cluster/saagi-estiam-eks_cluster" = "shared" # ajout du sous-réseau public à l'équillibreur de charge interne
-    }
+    "kubernetes.io/role/internal-elb"                = 1        # ajout d'un équillibreur de charge interne
+    "kubernetes.io/cluster/saagi-estiam-eks_cluster" = "shared" # ajout du sous-réseau public à l'équillibreur de charge interne
+  }
 
 }
 
@@ -80,11 +80,11 @@ resource "aws_route_table" "saagi-estiam-route_table" {
     gateway_id = aws_internet_gateway.saagi-estiam-internet-gateway.id
   }
 
-   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-route_table"
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-route_table"
   }
 }
 
@@ -99,10 +99,10 @@ resource "aws_eip" "saagi-estiam-eip" {
   vpc = true
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur      = "DNEDTB"
-        Name        = "saagi-estiam-eip"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-eip"
   }
 }
 
@@ -112,11 +112,11 @@ resource "aws_nat_gateway" "saagi-estiam-nat_gateway" {
   allocation_id = aws_eip.saagi-estiam-eip.id
   subnet_id     = aws_subnet.saagi-estiam-vpc-public-subnet.id
 
-   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-nat_gateway"
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-nat_gateway"
   }
 }
 
@@ -129,14 +129,14 @@ resource "aws_route" "saagi-estiam-route" {
 
 # Définition du groupe de sécurité pour le sous-réseau publique
 resource "aws_security_group" "saagi-estiam-public_sg" {
-  name   =  "saagi-estiam-public_sg"
+  name   = "saagi-estiam-public_sg"
   vpc_id = aws_vpc.saagi-estiam-vpc.id
 
-   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-public_sg"
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-public_sg"
   }
 }
 
@@ -170,14 +170,14 @@ resource "aws_security_group_rule" "saagi-estiam-egress_public_sg" {
 
 # Définition du groupe de sécurité pour le data plane
 resource "aws_security_group" "saagi-estiam-data_plane_sg" {
-  name   =  "saagi-estiam-data_plane_Worker-sg"
+  name   = "saagi-estiam-data_plane_Worker-sg"
   vpc_id = aws_vpc.saagi-estiam-vpc.id
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-data_plane_Worker-sg"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-data_plane_Worker-sg"
   }
 }
 
@@ -217,10 +217,10 @@ resource "aws_security_group" "saagi-estiam-control_plane_sg" {
   vpc_id = aws_vpc.saagi-estiam-vpc.id
 
   tags = {
-        Terraform   = "true"
-        Environment = "dev"
-        auteur = "DNEDTB"
-        Name = "saagi-estiam-control_plane_sg"
+    Terraform   = "true"
+    Environment = "dev"
+    auteur      = "DNEDTB"
+    Name        = "saagi-estiam-control_plane_sg"
   }
 }
 
